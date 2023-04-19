@@ -81,7 +81,7 @@ pub fn test_client_invalid_client_id() {
         .custom_key_provider(TestKeyProvider)
         .build();
     let result = client.verify_token(TOKEN).map(|_| ());
-    assert_eq!(result, Err(Error::InvalidToken))
+    assert_eq!(result, Err(Error::InvalidToken("invalid audience")))
 }
 
 #[cfg(feature = "blocking")]
