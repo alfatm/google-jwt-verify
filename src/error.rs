@@ -1,23 +1,24 @@
 use crate::algorithm::Algorithm;
-use base64::DecodeError;
 
 #[derive(Debug, PartialEq)]
 pub enum Error {
     InvalidToken(&'static str),
+    Base64Error(base64::DecodeError),
+    SerdeError(String),
     RetrieveKeyFailure,
     UnsupportedAlgorithm(Algorithm),
     Expired,
 }
 
-impl From<DecodeError> for Error {
-    fn from(_: DecodeError) -> Self {
+impl From<base64::DecodeError> for Error {
+    fn from(_: base64::DecodeError) -> Self {
         Error::InvalidToken("decode error")
     }
 }
 
 impl From<serde_json::Error> for Error {
-    fn from(_: serde_json::Error) -> Self {
-        Error::InvalidToken("serde error")
+    fn from(err: serde_json::Error) -> Self {
+        Error::SerdeError(err.to_string())
     }
 }
 

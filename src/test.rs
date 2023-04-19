@@ -132,7 +132,7 @@ async fn test_client_invalid_client_id_async() {
         .custom_key_provider(TestKeyProvider)
         .build();
     let result = client.verify_token_async(TOKEN).await.map(|_| ());
-    assert_eq!(result, Err(Error::InvalidToken))
+    assert_eq!(result, Err(Error::InvalidToken("invalid client")))
 }
 
 #[cfg(feature = "async")]
