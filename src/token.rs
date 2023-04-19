@@ -64,39 +64,13 @@ impl RequiredClaims {
 
 #[derive(Deserialize, Clone)]
 pub struct IdPayload {
-    email: String,
-    email_verified: bool,
-    name: String,
-    picture: String,
-    given_name: String,
-    family_name: String,
-    locale: String,
-    hd: Option<String>,
-}
-
-impl IdPayload {
-    pub fn get_email(&self) -> String {
-        self.email.clone()
-    }
-    pub fn is_email_verified(&self) -> bool {
-        self.email_verified
-    }
-    pub fn get_name(&self) -> String {
-        self.name.clone()
-    }
-    pub fn get_picture_url(&self) -> String {
-        self.picture.clone()
-    }
-    pub fn get_given_name(&self) -> String {
-        self.given_name.clone()
-    }
-    pub fn get_family_name(&self) -> String {
-        self.family_name.clone()
-    }
-    pub fn get_locale(&self) -> String {
-        self.locale.clone()
-    }
-    pub fn get_domain(&self) -> Option<String> {
-        self.hd.clone()
-    }
+    pub email: String,
+    pub email_verified: bool,
+    pub name: String,
+    pub picture: String,
+    pub given_name: Option<String>,
+    pub family_name: Option<String>,
+    pub locale: Option<String>,
+    #[serde(rename = "hd")]
+    pub domain: Option<String>,
 }
