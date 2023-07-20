@@ -66,7 +66,9 @@ impl RequiredClaims {
 pub struct IdPayload {
     pub email: String,
     pub email_verified: bool,
+    #[serde(default)]
     pub name: String,
+    #[serde(default)]
     pub picture: String,
     pub given_name: Option<String>,
     pub family_name: Option<String>,
