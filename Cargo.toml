@@ -19,8 +19,8 @@ blocking = ["reqwest/blocking"]
 async-trait = { version = "0.1", optional = true }
 base64 = "0.22"
 headers = "0.4"
-openssl = "0.10"
 reqwest = { version = "0.12" }
+ring = { version = "0.17", features = ["std"] }
 serde = "1"
 serde_derive = "1"
 serde_json = "1"

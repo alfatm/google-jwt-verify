@@ -36,9 +36,3 @@ impl From<serde_json::Error> for Error {
         Error::SerdeError(err.to_string())
     }
 }
-
-impl From<openssl::error::ErrorStack> for Error {
-    fn from(_: openssl::error::ErrorStack) -> Self {
-        Error::InvalidToken("openssl error")
-    }
-}
