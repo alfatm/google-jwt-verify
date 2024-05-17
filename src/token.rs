@@ -20,7 +20,7 @@ impl<P> Token<P> {
     }
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct RequiredClaims {
     #[serde(rename = "iss")]
     issuer: String,
