@@ -114,7 +114,7 @@ async fn decode_keys_async() {
 #[cfg(feature = "async")]
 #[tokio::test]
 async fn test_client_async() {
-    let client = ClientAsync::new_with_provider(
+    let client = GenericClientAsync::new_with_provider(
         "37772117408-qjqo9hca513pdcunumt7gk08ii6te8is.apps.googleusercontent.com",
         TestKeyProvider,
     );
@@ -128,7 +128,7 @@ async fn test_client_async() {
 #[cfg(feature = "async")]
 #[tokio::test]
 async fn test_client_invalid_client_id_async() {
-    let client = ClientAsync::new_with_provider("invalid client id", TestKeyProvider);
+    let client = GenericClientAsync::new_with_provider("invalid client id", TestKeyProvider);
     let result = client.verify_token_async(TOKEN).await.map(|_| ());
     assert_eq!(result, Err(Error::InvalidToken("invalid audience")))
 }
@@ -137,7 +137,7 @@ async fn test_client_invalid_client_id_async() {
 #[tokio::test]
 async fn test_id_token_async() {
     let client =
-        ClientAsync::new_with_provider(AUDIENCE, TestKeyProvider).unsafe_ignore_expiration();
+        GenericClientAsync::new_with_provider(AUDIENCE, TestKeyProvider).unsafe_ignore_expiration();
 
     let id_token = client
         .verify_id_token_async(TOKEN)

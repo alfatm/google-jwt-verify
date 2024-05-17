@@ -7,13 +7,15 @@ use serde::Deserialize;
 use std::sync::Arc;
 use std::sync::Mutex;
 
-pub struct ClientBlocking<T = GoogleKeyProvider> {
+pub type ClientBlocking = GenericClientBlocking<GoogleKeyProvider>;
+
+pub struct GenericClientBlocking<T> {
     client_id: String,
     key_provider: Arc<Mutex<T>>,
     check_expiration: bool,
 }
 
-impl<KP: Default> ClientBlocking<KP> {
+impl<KP: Default> GenericClientBlocking<KP> {
     pub fn new(client_id: &str) -> Self {
         Self {
             client_id: client_id.to_owned(),
@@ -23,9 +25,9 @@ impl<KP: Default> ClientBlocking<KP> {
     }
 }
 
-impl<KP> ClientBlocking<KP> {
+impl<KP> GenericClientBlocking<KP> {
     pub fn new_with_provider(client_id: &str, provider: KP) -> Self {
-        ClientBlocking {
+        GenericClientBlocking {
             client_id: client_id.to_string(),
             key_provider: Arc::new(Mutex::new(provider)),
             check_expiration: true,
@@ -38,7 +40,7 @@ impl<KP> ClientBlocking<KP> {
     }
 }
 
-impl<KP: KeyProvider> ClientBlocking<KP> {
+impl<KP: KeyProvider> GenericClientBlocking<KP> {
     pub fn verify_token_with_payload<P>(&self, token_string: &str) -> Result<Token<P>, Error>
     where
         for<'a> P: Deserialize<'a>,

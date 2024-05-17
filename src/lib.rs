@@ -18,11 +18,11 @@ mod client_async;
 #[cfg(feature = "blocking")]
 pub use client_blocking::*;
 
+pub use crate::token::{IdPayload, RequiredClaims, Token};
 #[cfg(feature = "async")]
 pub use client_async::*;
-
-pub use crate::token::{IdPayload, RequiredClaims, Token};
 pub use error::Error;
+pub use key_provider::*;
 
 fn base64_decode(input: &str) -> Result<Vec<u8>, base64::DecodeError> {
     use base64::Engine as _;

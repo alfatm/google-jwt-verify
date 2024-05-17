@@ -1,20 +1,22 @@
 use crate::error::Error;
-use crate::key_provider::AsyncKeyProvider;
-use crate::key_provider::GoogleKeyProvider;
 use crate::token::IdPayload;
 use crate::token::Token;
 use crate::unverified_token::UnverifiedToken;
+use crate::AsyncKeyProvider;
+use crate::GoogleKeyProvider;
 use serde::Deserialize;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
-pub struct ClientAsync<T = GoogleKeyProvider> {
+pub type ClientAsync = GenericClientAsync<GoogleKeyProvider>;
+
+pub struct GenericClientAsync<T> {
     client_id: String,
     key_provider: Arc<Mutex<T>>,
     check_expiration: bool,
 }
 
-impl<KP: Default> ClientAsync<KP> {
+impl<KP: Default> GenericClientAsync<KP> {
     pub fn new(client_id: &str) -> Self {
         Self {
             client_id: client_id.to_owned(),
@@ -24,7 +26,7 @@ impl<KP: Default> ClientAsync<KP> {
     }
 }
 
-impl<KP> ClientAsync<KP> {
+impl<KP> GenericClientAsync<KP> {
     pub fn new_with_provider(client_id: &str, provider: KP) -> Self {
         Self {
             client_id: client_id.to_string(),
@@ -39,7 +41,7 @@ impl<KP> ClientAsync<KP> {
     }
 }
 
-impl<KP: AsyncKeyProvider> ClientAsync<KP> {
+impl<KP: AsyncKeyProvider> GenericClientAsync<KP> {
     pub async fn verify_token_with_payload_async<P>(
         &self,
         token_string: &str,
