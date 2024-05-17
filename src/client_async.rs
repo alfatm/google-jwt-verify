@@ -1,5 +1,6 @@
 use crate::error::Error;
 use crate::key_provider::AsyncKeyProvider;
+use crate::key_provider::GoogleKeyProvider;
 use crate::token::IdPayload;
 use crate::token::Token;
 use crate::unverified_token::UnverifiedToken;
@@ -7,7 +8,7 @@ use serde::Deserialize;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
-pub struct ClientAsync<T> {
+pub struct ClientAsync<T = GoogleKeyProvider> {
     client_id: String,
     key_provider: Arc<Mutex<T>>,
     check_expiration: bool,

@@ -7,7 +7,7 @@ use serde::Deserialize;
 use std::sync::Arc;
 use std::sync::Mutex;
 
-pub struct ClientBlocking<T> {
+pub struct ClientBlocking<T = GoogleKeyProvider> {
     client_id: String,
     key_provider: Arc<Mutex<T>>,
     check_expiration: bool,
