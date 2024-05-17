@@ -64,8 +64,8 @@ impl RequiredClaims {
 
 #[derive(Deserialize, Clone)]
 pub struct IdPayload {
-    pub email: String,
-    pub email_verified: bool,
+    pub email: Option<String>,
+    pub email_verified: Option<bool>,
     #[serde(default)]
     pub name: String,
     #[serde(default)]
