@@ -10,8 +10,8 @@ use crate::key_provider::KeyProvider;
 #[cfg(feature = "async")]
 use async_trait::async_trait;
 
-const TOKEN: &'static str = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImE3NDhlOWY3NjcxNTlmNjY3YTAyMjMzMThkZTBiMjMyOWU1NDQzNjIifQ.eyJhenAiOiIzNzc3MjExNzQwOC1xanFvOWhjYTUxM3BkY3VudW10N2drMDhpaTZ0ZThpcy5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjM3NzcyMTE3NDA4LXFqcW85aGNhNTEzcGRjdW51bXQ3Z2swOGlpNnRlOGlzLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA3MDY3MzYxNTAzOTU0NDc0NDg4IiwiZW1haWwiOiJmdWNoc25qQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiaTBOWk5kYWp3UklJbDJvUk9zUUptUSIsImV4cCI6MTUyNjQ5MjUzMywiaXNzIjoiYWNjb3VudHMuZ29vZ2xlLmNvbSIsImp0aSI6IjNmMjc1YjRiY2JmZDU0Y2IxNjZmMzcxNWQ1NTBkMWNmMmUxYThiZGEiLCJpYXQiOjE1MjY0ODg5MzMsIm5hbWUiOiJOYXRoYW4gRm94IiwicGljdHVyZSI6Imh0dHBzOi8vbGg1Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tbEJSLWE3Z2gwdFkvQUFBQUFBQUFBQUkvQUFBQUFBQUFFUk0vNDFHUk43cDNNVzQvczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6Ik5hdGhhbiIsImZhbWlseV9uYW1lIjoiRm94IiwibG9jYWxlIjoiZW4ifQ.pOoIMLZgZIFP-fgQirCRRK31ap_CO7WZDeHge-U5GoAvF0VdkoSDSL-1-8d93qKb8IWzi2iS2MgaLekcX8eELM5x39Th1sBwjQGjYr5AXmqE53WDQiqvKzrz-BZ3ay0uSAMllxWfFi62BkSP3m1HJNWyUWrUf6GyI-Vy024dtrX9Qq_BOznJWbQVhHf5aA7x5AAoLHZ_PmzxbUlDQ7Go6FD7sgkoksZI4Cp77HZJMXXGVOrvvXJkpctTcuBZ2P-2filLmb29JIm0e4McOjeHQTV7XNGdzTZoyeSZcU5xTVFQK89e-SIPHKyaL7TAr_faBbTGzVryYfa2VFyKi7Z9gA";
-const JWKS: &'static str = r#"{
+const TOKEN: &str = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImE3NDhlOWY3NjcxNTlmNjY3YTAyMjMzMThkZTBiMjMyOWU1NDQzNjIifQ.eyJhenAiOiIzNzc3MjExNzQwOC1xanFvOWhjYTUxM3BkY3VudW10N2drMDhpaTZ0ZThpcy5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjM3NzcyMTE3NDA4LXFqcW85aGNhNTEzcGRjdW51bXQ3Z2swOGlpNnRlOGlzLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA3MDY3MzYxNTAzOTU0NDc0NDg4IiwiZW1haWwiOiJmdWNoc25qQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiaTBOWk5kYWp3UklJbDJvUk9zUUptUSIsImV4cCI6MTUyNjQ5MjUzMywiaXNzIjoiYWNjb3VudHMuZ29vZ2xlLmNvbSIsImp0aSI6IjNmMjc1YjRiY2JmZDU0Y2IxNjZmMzcxNWQ1NTBkMWNmMmUxYThiZGEiLCJpYXQiOjE1MjY0ODg5MzMsIm5hbWUiOiJOYXRoYW4gRm94IiwicGljdHVyZSI6Imh0dHBzOi8vbGg1Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tbEJSLWE3Z2gwdFkvQUFBQUFBQUFBQUkvQUFBQUFBQUFFUk0vNDFHUk43cDNNVzQvczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6Ik5hdGhhbiIsImZhbWlseV9uYW1lIjoiRm94IiwibG9jYWxlIjoiZW4ifQ.pOoIMLZgZIFP-fgQirCRRK31ap_CO7WZDeHge-U5GoAvF0VdkoSDSL-1-8d93qKb8IWzi2iS2MgaLekcX8eELM5x39Th1sBwjQGjYr5AXmqE53WDQiqvKzrz-BZ3ay0uSAMllxWfFi62BkSP3m1HJNWyUWrUf6GyI-Vy024dtrX9Qq_BOznJWbQVhHf5aA7x5AAoLHZ_PmzxbUlDQ7Go6FD7sgkoksZI4Cp77HZJMXXGVOrvvXJkpctTcuBZ2P-2filLmb29JIm0e4McOjeHQTV7XNGdzTZoyeSZcU5xTVFQK89e-SIPHKyaL7TAr_faBbTGzVryYfa2VFyKi7Z9gA";
+const JWKS: &str = r#"{
  "keys": [
   {
    "kty": "RSA",
@@ -31,8 +31,7 @@ const JWKS: &'static str = r#"{
   }
  ]
 }"#;
-const AUDIENCE: &'static str =
-    "37772117408-qjqo9hca513pdcunumt7gk08ii6te8is.apps.googleusercontent.com";
+const AUDIENCE: &str = "37772117408-qjqo9hca513pdcunumt7gk08ii6te8is.apps.googleusercontent.com";
 
 struct TestKeyProvider;
 
@@ -67,19 +66,18 @@ pub fn decode_keys() {
 #[cfg(feature = "blocking")]
 #[test]
 pub fn test_client() {
-    let client =
-        Client::builder("37772117408-qjqo9hca513pdcunumt7gk08ii6te8is.apps.googleusercontent.com")
-            .custom_key_provider(TestKeyProvider)
-            .build();
+    let client = ClientBlocking::new_with_provider(
+        "37772117408-qjqo9hca513pdcunumt7gk08ii6te8is.apps.googleusercontent.com",
+        TestKeyProvider,
+    );
+
     assert_eq!(client.verify_token(TOKEN).map(|_| ()), Err(Error::Expired));
 }
 
 #[cfg(feature = "blocking")]
 #[test]
 pub fn test_client_invalid_client_id() {
-    let client = Client::builder("invalid client id")
-        .custom_key_provider(TestKeyProvider)
-        .build();
+    let client = ClientBlocking::new_with_provider("invalid client id", TestKeyProvider);
     let result = client.verify_token(TOKEN).map(|_| ());
     assert_eq!(result, Err(Error::InvalidToken("invalid audience")))
 }
@@ -87,16 +85,17 @@ pub fn test_client_invalid_client_id() {
 #[cfg(feature = "blocking")]
 #[test]
 pub fn test_id_token() {
-    let client = Client::builder(AUDIENCE)
-        .custom_key_provider(TestKeyProvider)
-        .unsafe_ignore_expiration()
-        .build();
+    let client =
+        ClientBlocking::new_with_provider(AUDIENCE, TestKeyProvider).unsafe_ignore_expiration();
     let id_token = client
         .verify_id_token(TOKEN)
         .expect("id token should be valid");
     assert_eq!(id_token.get_claims().get_audience(), AUDIENCE);
     assert_eq!(id_token.get_payload().domain, None);
-    assert_eq!(id_token.get_payload().email, "fuchsnj@gmail.com");
+    assert_eq!(
+        id_token.get_payload().email,
+        Some("fuchsnj@gmail.com".to_string())
+    );
 }
 
 #[cfg(feature = "async")]
@@ -115,10 +114,11 @@ async fn decode_keys_async() {
 #[cfg(feature = "async")]
 #[tokio::test]
 async fn test_client_async() {
-    let client =
-        Client::builder("37772117408-qjqo9hca513pdcunumt7gk08ii6te8is.apps.googleusercontent.com")
-            .custom_key_provider(TestKeyProvider)
-            .build();
+    let client = ClientAsync::new_with_provider(
+        "37772117408-qjqo9hca513pdcunumt7gk08ii6te8is.apps.googleusercontent.com",
+        TestKeyProvider,
+    );
+
     assert_eq!(
         client.verify_token_async(TOKEN).await.map(|_| ()),
         Err(Error::Expired)
@@ -128,25 +128,25 @@ async fn test_client_async() {
 #[cfg(feature = "async")]
 #[tokio::test]
 async fn test_client_invalid_client_id_async() {
-    let client = Client::builder("invalid client id")
-        .custom_key_provider(TestKeyProvider)
-        .build();
+    let client = ClientAsync::new_with_provider("invalid client id", TestKeyProvider);
     let result = client.verify_token_async(TOKEN).await.map(|_| ());
-    assert_eq!(result, Err(Error::InvalidToken("invalid client")))
+    assert_eq!(result, Err(Error::InvalidToken("invalid audience")))
 }
 
 #[cfg(feature = "async")]
 #[tokio::test]
 async fn test_id_token_async() {
-    let client = Client::builder(AUDIENCE)
-        .custom_key_provider(TestKeyProvider)
-        .unsafe_ignore_expiration()
-        .build();
+    let client =
+        ClientAsync::new_with_provider(AUDIENCE, TestKeyProvider).unsafe_ignore_expiration();
+
     let id_token = client
         .verify_id_token_async(TOKEN)
         .await
         .expect("id token should be valid");
     assert_eq!(id_token.get_claims().get_audience(), AUDIENCE);
     assert_eq!(id_token.get_payload().domain, None);
-    assert_eq!(id_token.get_payload().email, "fuchsnj@gmail.com");
+    assert_eq!(
+        id_token.get_payload().email,
+        Some("fuchsnj@gmail.com".to_string())
+    );
 }

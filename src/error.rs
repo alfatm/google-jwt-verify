@@ -1,13 +1,28 @@
 use crate::algorithm::Algorithm;
+use thiserror::Error;
 
-#[derive(Debug, PartialEq)]
+#[derive(Error, Debug, PartialEq)]
 pub enum Error {
+    #[error("Invalid token: {0}")]
     InvalidToken(&'static str),
+
+    #[error("Failed to decode from Base64: {0}")]
     Base64Error(base64::DecodeError),
+
+    #[error("Failed to deserialize data: {0}")]
     SerdeError(String),
+
+    #[error("Failed to retrieve the key")]
     RetrieveKeyFailure,
+
+    #[error("Unsupported algorithm: {0:?}")]
     UnsupportedAlgorithm(Algorithm),
+
+    #[error("JWT token has expired")]
     Expired,
+
+    #[error("Mutex poisoned")]
+    MutexPoisoned,
 }
 
 impl From<base64::DecodeError> for Error {

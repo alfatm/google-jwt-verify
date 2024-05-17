@@ -12,9 +12,11 @@ impl<P> Token<P> {
             payload,
         }
     }
+
     pub fn get_claims(&self) -> RequiredClaims {
         self.required_claims.clone()
     }
+
     pub fn get_payload(&self) -> &P {
         &self.payload
     }
@@ -45,18 +47,23 @@ impl RequiredClaims {
     pub fn get_issuer(&self) -> String {
         self.issuer.clone()
     }
+
     pub fn get_subject(&self) -> String {
         self.subject.clone()
     }
+
     pub fn get_audience(&self) -> String {
         self.audience.clone()
     }
+
     pub fn get_android_audience(&self) -> String {
         self.android_audience.clone()
     }
+
     pub fn get_issued_at(&self) -> u64 {
         self.issued_at
     }
+
     pub fn get_expires_at(&self) -> u64 {
         self.expires_at
     }

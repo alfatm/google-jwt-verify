@@ -42,18 +42,20 @@ impl GoogleKeyProvider {
                 expiration_time = Some(Instant::now() + max_age);
             }
         }
-        let key_set = serde_json::from_str(&text).map_err(|_| ())?;
+        let key_set = serde_json::from_str(text).map_err(|_| ())?;
         if let Some(expiration_time) = expiration_time {
             self.cached = Some(key_set);
             self.expiration_time = expiration_time;
         }
         Ok(self.cached.as_ref().unwrap())
     }
+
     #[cfg(feature = "blocking")]
     pub fn download_keys(&mut self) -> Result<&JsonWebKeySet, ()> {
         let result = reqwest::blocking::get(GOOGLE_CERT_URL).map_err(|_| ())?;
         self.process_response(&result.headers().clone(), &result.text().map_err(|_| ())?)
     }
+
     #[cfg(feature = "async")]
     async fn download_keys_async(&mut self) -> Result<&JsonWebKeySet, ()> {
         let result = reqwest::get(GOOGLE_CERT_URL).await.map_err(|_| ())?;
@@ -100,7 +102,6 @@ pub fn test_google_provider() {
 #[cfg(all(test, feature = "async"))]
 mod async_test {
     use super::{AsyncKeyProvider, GoogleKeyProvider};
-    use tokio;
     #[tokio::test]
     async fn test_google_provider_async() {
         let mut provider = GoogleKeyProvider::default();
