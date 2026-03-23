@@ -1,4 +1,5 @@
 use crate::error::Error;
+use crate::key_provider::GoogleKeyProvider;
 use crate::key_provider::KeyProvider;
 use crate::token::IdPayload;
 use crate::token::Token;
